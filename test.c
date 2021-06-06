@@ -38,7 +38,7 @@ static void find_header(int8_t *rbuf, int32_t start, int32_t *state, int32_t len
 	uint32_t i = 0;
 
 	for(i = start ; i < len ; i++) {
-		if(*state == STATE_WAIT_ID1) {
+		if(*state == MSG_WAIT_ID1) {
 			if(rbuf[i] == ID1)
 				*state = MSG_WAIT_ID2;
 			else
@@ -46,7 +46,7 @@ static void find_header(int8_t *rbuf, int32_t start, int32_t *state, int32_t len
 
 			continue;
 
-		} else if(*state == STATE_WAIT_ID2) {
+		} else if(*state == MSG_WAIT_ID2) {
 			if(rbuf[i] == ID2) {
 				*state = MSG_WAIT_OP;
 			} else
@@ -54,27 +54,27 @@ static void find_header(int8_t *rbuf, int32_t start, int32_t *state, int32_t len
 
 			continue;
 
-		} else if(*state == STATE_WAIT_OP) {
+		} else if(*state == MSG_WAIT_OP) {
 			if(rbuf[i] != ID1)
 				*state = MSG_WAIT_SEQ;
 			else
 				*state = MSG_WAIT_ID1;
 			continue;
-		} else if(*state == STATE_WAIT_SEQ) {
+		} else if(*state == MSG_WAIT_SEQ) {
 			if(rbuf[i] != ID1)
                                 *state = MSG_WAIT_LEN;
                         else
                                 *state = MSG_WAIT_ID1;
 			continue;
-		} else if(*state == STATE_WAIT_LEN) {
+		} else if(*state == MSG_WAIT_LEN) {
 			if(rbuf[i] != ID1)
                                 *state = MSG_WAIT_PAYLOAD;
                         else
                                 *state = MSG_WAIT_ID1;
 			continue;
-		} else if(*state == STATE_WAIT_PAYLOAD) {
+		} else if(*state == MSG_WAIT_PAYLOAD) {
 			if(i == len - 1)
-				*state = STATE_READY;
+				*state = MSG_READY;
 		}
 	}
 }
